@@ -46,11 +46,13 @@ def main() -> None:
                     light_pixels += 1
                 elif lightness <= 0.15:
                     dark_pixels += 1
-                elif hue <= 30 or hue >= 330:
+                elif saturation <= 0.15:
+                    continue
+                elif hue <= 15 or hue >= 345:
                     red_pixels += 1
-                elif 90 <= hue <= 150:
+                elif 120 <= hue <= 150:
                     green_pixels += 1
-                elif 210 <= hue <= 270:
+                elif 200 <= hue <= 230:
                     blue_pixels += 1
             json_image["white"] = light_pixels / pixels
             json_image["blue"] = blue_pixels / pixels
