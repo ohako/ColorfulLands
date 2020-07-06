@@ -33,6 +33,11 @@ def main() -> None:
             dark_pixels = 0
             red_pixels = 0
             green_pixels = 0
+            purple_pixels = 0
+            pink_pixels = 0
+            yellow_pixels = 0
+            orange_pixels = 0
+            brown_pixels = 0
             sleep(0.1)
             image = Image.open(requests.get(json_image["art"], stream=True).raw)
             for pixel in image.getdata():
@@ -48,17 +53,33 @@ def main() -> None:
                     dark_pixels += 1
                 elif saturation <= 0.15:
                     continue
-                elif hue <= 15 or hue >= 345:
+                if hue <= 15 or hue >= 345:
                     red_pixels += 1
+                elif 21 <= hue <= 40:
+                    if lightness >= 0.45:
+                        orange_pixels += 1
+                    else:
+                        brown_pixels += 1
+                elif 51 <= hue <= 60:
+                    yellow_pixels += 1
                 elif 120 <= hue <= 150:
                     green_pixels += 1
                 elif 200 <= hue <= 230:
                     blue_pixels += 1
+                elif 241 <= hue <= 280:
+                    purple_pixels += 1
+                elif 331 <= hue <= 345:
+                    pink_pixels += 1
             json_image["white"] = light_pixels / pixels
             json_image["blue"] = blue_pixels / pixels
             json_image["black"] = dark_pixels / pixels
             json_image["red"] = red_pixels / pixels
             json_image["green"] = green_pixels / pixels
+            json_image["purple"] = purple_pixels / pixels
+            json_image["pink"] = pink_pixels / pixels
+            json_image["yellow"] = yellow_pixels / pixels
+            json_image["orange"] = orange_pixels / pixels
+            json_image["brown"] = brown_pixels / pixels
             json_images.append(json_image)
     with open(land_type + "_with_pixel_counts.json", "w") as outfile:
         json.dump(json_images, outfile)
