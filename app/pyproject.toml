@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "Colorful Lands"
+version = "1.0.0"
+description = "Multi-stage python scripts to count pixels in basic land art and order them by color."
+authors = ["Keith Page (ohako79@gmail.com)"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+requests = "^2.26.0"
+pillow = "^8.3.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

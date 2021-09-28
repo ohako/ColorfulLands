@@ -24,63 +24,42 @@ def main() -> None:
     """
     land_type = sys.argv[1]
     json_images = []
-    with io.open(land_type + ".json", "rb") as input_stream:
+    with io.open("data/" + land_type + ".json", "rb") as input_stream:
         json_data = json.load(input_stream)
         for json_image in json_data:
             pixels = 0
             light_pixels = 0
-            blue_pixels = 0
             dark_pixels = 0
-            red_pixels = 0
-            green_pixels = 0
-            purple_pixels = 0
-            pink_pixels = 0
-            yellow_pixels = 0
-            orange_pixels = 0
-            brown_pixels = 0
+            non_redness = 0
+            non_greenness = 0
+            non_blueness = 0
             sleep(0.1)
-            image = Image.open(requests.get(json_image["art"], stream=True).raw)
-            for pixel in image.getdata():
-                red = pixel[0] / 255
-                green = pixel[1] / 255
-                blue = pixel[2] / 255
-                hue, lightness, saturation = colorsys.rgb_to_hls(red, green, blue)
-                hue = hue * 360
-                pixels += 1
-                if lightness >= 0.85:
-                    light_pixels += 1
-                elif lightness <= 0.15:
-                    dark_pixels += 1
-                elif saturation <= 0.15:
+            with requests.get(json_image["art"], stream=True) as response:
+                if not response.ok:
+                    print(str(response.status_code) + "\n")
+                    print(response.text + "\n")
                     continue
-                if hue <= 15 or hue >= 345:
-                    red_pixels += 1
-                elif 21 <= hue <= 40:
-                    if lightness >= 0.45:
-                        orange_pixels += 1
-                    else:
-                        brown_pixels += 1
-                elif 51 <= hue <= 60:
-                    yellow_pixels += 1
-                elif 120 <= hue <= 150:
-                    green_pixels += 1
-                elif 200 <= hue <= 230:
-                    blue_pixels += 1
-                elif 241 <= hue <= 280:
-                    purple_pixels += 1
-                elif 331 <= hue <= 345:
-                    pink_pixels += 1
-            json_image["white"] = light_pixels / pixels
-            json_image["blue"] = blue_pixels / pixels
-            json_image["black"] = dark_pixels / pixels
-            json_image["red"] = red_pixels / pixels
-            json_image["green"] = green_pixels / pixels
-            json_image["purple"] = purple_pixels / pixels
-            json_image["pink"] = pink_pixels / pixels
-            json_image["yellow"] = yellow_pixels / pixels
-            json_image["orange"] = orange_pixels / pixels
-            json_image["brown"] = brown_pixels / pixels
-            json_images.append(json_image)
+                image = Image.open(response.raw)
+                for pixel in image.getdata():
+                    red = pixel[0] / 255
+                    green = pixel[1] / 255
+                    blue = pixel[2] / 255
+                    hue, lightness, saturation = colorsys.rgb_to_hls(red, green, blue)
+                    hue = hue * 360
+                    pixels += 1
+                    if lightness >= 0.85:
+                        light_pixels += 1
+                    elif lightness <= 0.15:
+                        dark_pixels += 1
+                    non_redness += (360 - hue if hue > 180 else hue) ** 2
+                    non_greenness += (120 - hue if hue < 300 else 120 + (360 - hue)) ** 2
+                    non_blueness += (240 - hue if hue > 60 else 120 + hue) ** 2
+                json_image["white"] = light_pixels / pixels
+                json_image["blue"] = non_blueness
+                json_image["black"] = dark_pixels / pixels
+                json_image["red"] = non_redness
+                json_image["green"] = non_greenness
+                json_images.append(json_image)
     with open(land_type + "_with_pixel_counts.json", "w") as outfile:
         json.dump(json_images, outfile)
 

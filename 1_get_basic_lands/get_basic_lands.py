@@ -34,7 +34,7 @@ def main() -> None:
     card_data = request_card_data(
         "https://api.scryfall.com/cards/search?q=type%3Abasic+type%3A"
         + land_type
-        + "+unique%3Aart+in%3Apaper+not%3Afullart+-type%3Asnow+-set%3Aana+-set%3Asld+-set%3Apana"
+        + "+unique%3Aart+-is%3Adigital+-is%3Afullart+-type%3Asnow+-artist%3A"
     )
     with open(land_type + ".json", "w") as outfile:
         json.dump(card_data, outfile)

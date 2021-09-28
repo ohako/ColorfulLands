@@ -23,7 +23,7 @@ def main() -> None:
     land_type = sys.argv[1]
     global color
     color = sys.argv[2]
-    with io.open(land_type + "_with_pixel_counts.json", "rb") as input_stream:
+    with io.open("data/" + land_type + "_with_pixel_counts.json", "rb") as input_stream:
         lands = list(json.load(input_stream))
     lands.sort(reverse=True, key=sort_by_color)
     with open("ordered_" + color + "_" + land_type + ".csv", "w", newline="") as csvfile:

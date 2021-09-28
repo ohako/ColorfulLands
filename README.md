@@ -6,4 +6,4 @@ I specifically wrote it to discover the 'bluest' Mountain card. If you don't fee
 
 Oh, and I should mention that all of the card image art that I've been running against is copyrighted by Wizards of the Coast or sometimes by other artists, and not me. I think I have adhered to Scryfall's image use policy, but in any case the Scryfall people haven't endorsed, approved of, or are even aware of this bit of software.
 
-I left out all the bits where I have to use Pipfiles and Dockerfiles and such, because it's embarrassing how much glue you need just to run a widdle bitty script like this one. If you'd like to run this pile yourself, keep in mind you're going to need access to the requests and Pillow python package libraries.
+To run this yourself, your python requires the poetry meta-dependency. Run ```python -m pip install poetry``` if you haven't already, and then from the ```app``` folder you should be able to run ```poetry install```. Then you should be able to run any of these scripts from their directories by entering a ```poetry shell```.

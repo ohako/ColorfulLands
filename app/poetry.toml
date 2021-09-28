@@ -1,0 +1,3 @@
+[virtualenvs]
+# Creates .venv dir within project for easy access and IDE integration
+in-project = true
